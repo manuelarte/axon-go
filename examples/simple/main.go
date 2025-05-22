@@ -57,19 +57,18 @@ func main() {
 			log.Printf("Endpoint Registered: %s", endpoint.String())
 
 			{
-				/*params := &axongo.RegisterQueryHandlerParams{Context: "default"}
-				  body := axongo.RegisterQueryHandlerJSONRequestBody{
-				  	Name:     ptr("GetUserByIDQuery"),
-				  	QueryUrl: ptr("http://host.docker.internal:8081/queries/GetUserByIDQuery"),
-				  }
-				  resp, err := c.RegisterQueryHandlerWithResponse(ctx, endpoint, params, body)
-				    if err != nil {
-				    	log.Fatal(err)
-				    }
-				    if resp.StatusCode() != http.StatusCreated {
-				    	log.Fatalf("Expected HTTP 201 but received %d. Body: %s", resp.StatusCode(), resp.Body)
-				    }
-				    fmt.Printf("resp.JSON201: %v\n", resp.Body)*/
+				params := &axongo.RegisterQueryHandlerParams{Context: "default"}
+				body := axongo.RegisterQueryHandlerJSONRequestBody{
+					Name: ptr("GetUserByIDQuery"),
+				}
+				resp, err := c.RegisterQueryHandlerWithResponse(ctx, endpoint, params, body)
+				if err != nil {
+					log.Fatal(err)
+				}
+				if resp.StatusCode() != http.StatusCreated {
+					log.Fatalf("Expected HTTP 201 but received %d. Body: %s", resp.StatusCode(), resp.Body)
+				}
+				fmt.Printf("resp.JSON201: %v\n", resp.Body)
 			}
 
 		}
