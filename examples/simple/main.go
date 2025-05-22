@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/google/uuid"
-	axongo "github.com/manuelarte/axon-go"
 	"log"
 	"log/slog"
 	"net/http"
@@ -13,12 +11,15 @@ import (
 	"slices"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/spf13/viper"
 	"goapp/api"
 	"goapp/controllers"
 	"goapp/repositories"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	axongo "github.com/manuelarte/axon-go"
 )
 
 func main() {
@@ -143,7 +144,7 @@ func deleteAndRegisterEndpoint(
 			HealthUrl:    ptr("/actuators/info"),
 			QueryUrl:     ptr("/queries"),
 			Name:         ptr(endpointName),
-			Type:         ptr("HTTP(S)"), //HTTP(S), PRocket
+			Type:         ptr("HTTP(S)"), // HTTP(S), PRocket
 			WrappingType: ptr("Raw"),
 			ContentType:  ptr("application/json"),
 		}
