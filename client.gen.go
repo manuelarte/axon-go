@@ -12,10 +12,483 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/oapi-codegen/runtime"
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
+
+// Defines values for QueryResponseCardinality.
+const (
+	MULTIPLE QueryResponseCardinality = "MULTIPLE"
+	SINGLE   QueryResponseCardinality = "SINGLE"
+)
+
+// AggregatePage defines model for AggregatePage.
+type AggregatePage struct {
+	Events       *[]Event `json:"events,omitempty"`
+	IsLast       *bool    `json:"isLast,omitempty"`
+	NumberOfPage *int64   `json:"numberOfPage,omitempty"`
+	Size         *int64   `json:"size,omitempty"`
+}
+
+// Command Command to be dispatched
+type Command struct {
+	Id              *string            `json:"id,omitempty"`
+	MetaData        *map[string]string `json:"metaData,omitempty"`
+	Name            *string            `json:"name,omitempty"`
+	Payload         *JsonNode          `json:"payload,omitempty"`
+	PayloadRevision *string            `json:"payloadRevision,omitempty"`
+	PayloadType     *string            `json:"payloadType,omitempty"`
+	Priority        *int32             `json:"priority,omitempty"`
+	RoutingKey      *string            `json:"routingKey,omitempty"`
+}
+
+// CommandHandler defines model for CommandHandler.
+type CommandHandler struct {
+	CommandUrl *string `json:"commandUrl,omitempty"`
+	LoadFactor *int32  `json:"loadFactor,omitempty"`
+	Name       *string `json:"name,omitempty"`
+}
+
+// CommandHandlerOverview defines model for CommandHandlerOverview.
+type CommandHandlerOverview struct {
+	CommandUrl *string `json:"commandUrl,omitempty"`
+	Id         *string `json:"id,omitempty"`
+	LoadFactor *int32  `json:"loadFactor,omitempty"`
+	Name       *string `json:"name,omitempty"`
+}
+
+// CommandResponse defines model for CommandResponse.
+type CommandResponse struct {
+	Id              *string            `json:"id,omitempty"`
+	MetaData        *map[string]string `json:"metaData,omitempty"`
+	Payload         *JsonNode          `json:"payload,omitempty"`
+	PayloadRevision *string            `json:"payloadRevision,omitempty"`
+	PayloadType     *string            `json:"payloadType,omitempty"`
+}
+
+// Endpoint defines model for Endpoint.
+type Endpoint struct {
+	BaseUrl      *string            `json:"baseUrl,omitempty"`
+	CommandUrl   *string            `json:"commandUrl,omitempty"`
+	ContentType  *string            `json:"contentType,omitempty"`
+	EventUrl     *string            `json:"eventUrl,omitempty"`
+	HealthUrl    *string            `json:"healthUrl,omitempty"`
+	MetaData     *map[string]string `json:"metaData,omitempty"`
+	Name         *string            `json:"name,omitempty"`
+	QueryUrl     *string            `json:"queryUrl,omitempty"`
+	Type         *string            `json:"type,omitempty"`
+	WrappingType *string            `json:"wrappingType,omitempty"`
+}
+
+// EndpointOverview defines model for EndpointOverview.
+type EndpointOverview struct {
+	Active          *bool                     `json:"active,omitempty"`
+	BaseUrl         *string                   `json:"baseUrl,omitempty"`
+	CommandHandlers *[]CommandHandlerOverview `json:"commandHandlers,omitempty"`
+	CommandUrl      *string                   `json:"commandUrl,omitempty"`
+	Connections     *int32                    `json:"connections,omitempty"`
+	Context         *string                   `json:"context,omitempty"`
+	EventHandlers   *[]EventHandlerOverview   `json:"eventHandlers,omitempty"`
+	EventUrl        *string                   `json:"eventUrl,omitempty"`
+	HealthUrl       *string                   `json:"healthUrl,omitempty"`
+	Id              *string                   `json:"id,omitempty"`
+	MetaData        *map[string]string        `json:"metaData,omitempty"`
+	Name            *string                   `json:"name,omitempty"`
+	QueryHandlers   *[]QueryHandlerOverview   `json:"queryHandlers,omitempty"`
+	QueryUrl        *string                   `json:"queryUrl,omitempty"`
+	Type            *string                   `json:"type,omitempty"`
+	WrappingType    *string                   `json:"wrappingType,omitempty"`
+}
+
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Error   *string `json:"error,omitempty"`
+	Message *string `json:"message,omitempty"`
+	Status  *string `json:"status,omitempty"`
+}
+
+// Event defines model for Event.
+type Event struct {
+	AggregateId     *string            `json:"aggregateId,omitempty"`
+	AggregateType   *string            `json:"aggregateType,omitempty"`
+	DateTime        *time.Time         `json:"dateTime,omitempty"`
+	Id              *string            `json:"id,omitempty"`
+	MetaData        *map[string]string `json:"metaData,omitempty"`
+	Payload         *JsonNode          `json:"payload,omitempty"`
+	PayloadRevision *string            `json:"payloadRevision,omitempty"`
+	PayloadType     *string            `json:"payloadType,omitempty"`
+	SequenceNumber  *int64             `json:"sequenceNumber,omitempty"`
+}
+
+// EventHandler defines model for EventHandler.
+type EventHandler struct {
+	BatchSize                  *int32  `json:"batchSize,omitempty"`
+	EventUrl                   *string `json:"eventUrl,omitempty"`
+	Filter                     *string `json:"filter,omitempty"`
+	Name                       *string `json:"name,omitempty"`
+	Segments                   *int32  `json:"segments,omitempty"`
+	SequencingPolicy           *string `json:"sequencingPolicy,omitempty"`
+	SequencingPolicyParameters *string `json:"sequencingPolicyParameters,omitempty"`
+	StartPosition              *string `json:"startPosition,omitempty"`
+}
+
+// EventHandlerOverview defines model for EventHandlerOverview.
+type EventHandlerOverview struct {
+	BatchSize                  *int32    `json:"batchSize,omitempty"`
+	EventUrl                   *string   `json:"eventUrl,omitempty"`
+	Filter                     *string   `json:"filter,omitempty"`
+	Id                         *string   `json:"id,omitempty"`
+	Name                       *string   `json:"name,omitempty"`
+	SequencingPolicy           *string   `json:"sequencingPolicy,omitempty"`
+	SequencingPolicyParameters *[]string `json:"sequencingPolicyParameters,omitempty"`
+}
+
+// Id defines model for Id.
+type Id struct {
+	Id *string `json:"id,omitempty"`
+}
+
+// JsonNode defines model for JsonNode.
+type JsonNode = map[string]interface{}
+
+// Query Query to be dispatched
+type Query struct {
+	Id                   *string                   `json:"id,omitempty"`
+	MetaData             *map[string]string        `json:"metaData,omitempty"`
+	Name                 *string                   `json:"name,omitempty"`
+	NumberOfResponses    *int32                    `json:"numberOfResponses,omitempty"`
+	Payload              *JsonNode                 `json:"payload,omitempty"`
+	PayloadRevision      *string                   `json:"payloadRevision,omitempty"`
+	PayloadType          *string                   `json:"payloadType,omitempty"`
+	ResponseCardinality  *QueryResponseCardinality `json:"responseCardinality,omitempty"`
+	ResponseType         *string                   `json:"responseType,omitempty"`
+	ResponseTypeEncoding *string                   `json:"responseTypeEncoding,omitempty"`
+}
+
+// QueryResponseCardinality defines model for Query.ResponseCardinality.
+type QueryResponseCardinality string
+
+// QueryHandler defines model for QueryHandler.
+type QueryHandler struct {
+	Name     *string `json:"name,omitempty"`
+	QueryUrl *string `json:"queryUrl,omitempty"`
+}
+
+// QueryHandlerOverview defines model for QueryHandlerOverview.
+type QueryHandlerOverview struct {
+	Id       *string `json:"id,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	QueryUrl *string `json:"queryUrl,omitempty"`
+}
+
+// QueryResponse defines model for QueryResponse.
+type QueryResponse struct {
+	Id              *string            `json:"id,omitempty"`
+	MetaData        *map[string]string `json:"metaData,omitempty"`
+	Payload         *JsonNode          `json:"payload,omitempty"`
+	PayloadRevision *string            `json:"payloadRevision,omitempty"`
+	PayloadType     *string            `json:"payloadType,omitempty"`
+}
+
+// Snapshot defines model for Snapshot.
+type Snapshot struct {
+	AggregateId     *string            `json:"aggregateId,omitempty"`
+	AggregateType   *string            `json:"aggregateType,omitempty"`
+	DateTime        *time.Time         `json:"dateTime,omitempty"`
+	Id              *string            `json:"id,omitempty"`
+	MetaData        *map[string]string `json:"metaData,omitempty"`
+	Payload         *JsonNode          `json:"payload,omitempty"`
+	PayloadRevision *string            `json:"payloadRevision,omitempty"`
+	PayloadType     *string            `json:"payloadType,omitempty"`
+	SequenceNumber  *int64             `json:"sequenceNumber,omitempty"`
+}
+
+// ReadAggregateEventsParams defines parameters for ReadAggregateEvents.
+type ReadAggregateEventsParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+
+	// MinSequence Minimum sequence number (inclusive)
+	MinSequence *string `form:"minSequence,omitempty" json:"minSequence,omitempty"`
+}
+
+// ReadAggregateEventsPagedParams defines parameters for ReadAggregateEventsPaged.
+type ReadAggregateEventsPagedParams struct {
+	Context    string `form:"context" json:"context"`
+	PageOffset int64  `form:"pageOffset" json:"pageOffset"`
+	PageSize   int32  `form:"pageSize" json:"pageSize"`
+}
+
+// ReadSnapshotsParams defines parameters for ReadSnapshots.
+type ReadSnapshotsParams struct {
+	Context     string `form:"context" json:"context"`
+	MinSequence *int64 `form:"minSequence,omitempty" json:"minSequence,omitempty"`
+	MaxResults  *int32 `form:"maxResults,omitempty" json:"maxResults,omitempty"`
+}
+
+// DispatchCommandParams defines parameters for DispatchCommand.
+type DispatchCommandParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// DispatchCommandRawParams defines parameters for DispatchCommandRaw.
+type DispatchCommandRawParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+
+	// AxonIQMessageId Message identifier
+	AxonIQMessageId *string `json:"AxonIQ-MessageId,omitempty"`
+
+	// AxonIQPayloadType Payload type
+	AxonIQPayloadType *string `json:"AxonIQ-PayloadType,omitempty"`
+
+	// AxonIQPayloadRevision Payload revision
+	AxonIQPayloadRevision *string `json:"AxonIQ-PayloadRevision,omitempty"`
+
+	// AxonIQPriority Priority level
+	AxonIQPriority *int32 `json:"AxonIQ-Priority,omitempty"`
+
+	// AxonIQRoutingKey Routing key
+	AxonIQRoutingKey *string `json:"AxonIQ-RoutingKey,omitempty"`
+}
+
+// RegisterEndpointParams defines parameters for RegisterEndpoint.
+type RegisterEndpointParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// DeleteEndpointParams defines parameters for DeleteEndpoint.
+type DeleteEndpointParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// GetEndpointParams defines parameters for GetEndpoint.
+type GetEndpointParams struct {
+	Context string `form:"context" json:"context"`
+}
+
+// PatchEndpointParams defines parameters for PatchEndpoint.
+type PatchEndpointParams struct {
+	// Active Activation state: true to activate, false to deactivate
+	Active string `form:"active" json:"active"`
+
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// UpdateEndpointParams defines parameters for UpdateEndpoint.
+type UpdateEndpointParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// RegisterCommandHandlerParams defines parameters for RegisterCommandHandler.
+type RegisterCommandHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// DeleteCommandHandlerParams defines parameters for DeleteCommandHandler.
+type DeleteCommandHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// GetCommandHandlerParams defines parameters for GetCommandHandler.
+type GetCommandHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// UpdateCommandHandlerParams defines parameters for UpdateCommandHandler.
+type UpdateCommandHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// RegisterEventHandlerParams defines parameters for RegisterEventHandler.
+type RegisterEventHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// DeleteEventHandlerParams defines parameters for DeleteEventHandler.
+type DeleteEventHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// GetEventHandlerParams defines parameters for GetEventHandler.
+type GetEventHandlerParams struct {
+	Context string `form:"context" json:"context"`
+}
+
+// UpdateEventHandlerParams defines parameters for UpdateEventHandler.
+type UpdateEventHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// RegisterQueryHandlerParams defines parameters for RegisterQueryHandler.
+type RegisterQueryHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// DeleteQueryHandlerParams defines parameters for DeleteQueryHandler.
+type DeleteQueryHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// GetQueryHandlerParams defines parameters for GetQueryHandler.
+type GetQueryHandlerParams struct {
+	Context string `form:"context" json:"context"`
+}
+
+// UpdateQueryHandlerParams defines parameters for UpdateQueryHandler.
+type UpdateQueryHandlerParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// PublishEvents1ApplicationVndAxoniqEventListPlusJSONBody defines parameters for PublishEvents1.
+type PublishEvents1ApplicationVndAxoniqEventListPlusJSONBody = []Event
+
+// PublishEvents1Params defines parameters for PublishEvents1.
+type PublishEvents1Params struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// PublishEventRawParams defines parameters for PublishEventRaw.
+type PublishEventRawParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+
+	// AxonIQMessageId Message identifier
+	AxonIQMessageId *string `json:"AxonIQ-MessageId,omitempty"`
+
+	// AxonIQPayloadRevision Payload revision
+	AxonIQPayloadRevision *string `json:"AxonIQ-PayloadRevision,omitempty"`
+
+	// AxonIQAggregateId Aggregate identifier
+	AxonIQAggregateId *string `json:"AxonIQ-AggregateId,omitempty"`
+
+	// AxonIQAggregateType Aggregate type
+	AxonIQAggregateType *string `json:"AxonIQ-AggregateType,omitempty"`
+
+	// AxonIQSequenceNumber Sequence number
+	AxonIQSequenceNumber *int64 `json:"AxonIQ-SequenceNumber,omitempty"`
+
+	// AxonIQDateTime Date and time of the event
+	AxonIQDateTime *time.Time `json:"AxonIQ-DateTime,omitempty"`
+}
+
+// DispatchQueryRawParams defines parameters for DispatchQueryRaw.
+type DispatchQueryRawParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+}
+
+// DispatchQueryParams defines parameters for DispatchQuery.
+type DispatchQueryParams struct {
+	// Context Context name
+	Context string `form:"context" json:"context"`
+
+	// AxonIQMessageId Message identifier
+	AxonIQMessageId *string `json:"AxonIQ-MessageId,omitempty"`
+
+	// AxonIQPayloadType Payload type
+	AxonIQPayloadType *string `json:"AxonIQ-PayloadType,omitempty"`
+
+	// AxonIQPayloadRevision Payload revision
+	AxonIQPayloadRevision *string `json:"AxonIQ-PayloadRevision,omitempty"`
+
+	// AxonIQResponseType Query response type
+	AxonIQResponseType *string `json:"AxonIQ-ResponseType,omitempty"`
+
+	// AxonIQResponseTypeEncoding Query response type encoding
+	AxonIQResponseTypeEncoding *string `json:"AxonIQ-ResponseTypeEncoding,omitempty"`
+
+	// AxonIQResponseCardinality Query response type
+	AxonIQResponseCardinality *string `json:"AxonIQ-ResponseCardinality,omitempty"`
+
+	// AxonIQNumberOfResponders Query response type
+	AxonIQNumberOfResponders *int32 `json:"AxonIQ-NumberOfResponders,omitempty"`
+}
+
+// PublishSnapshotParams defines parameters for PublishSnapshot.
+type PublishSnapshotParams struct {
+	Context string `form:"context" json:"context"`
+}
+
+// PublishSnapshotRawParams defines parameters for PublishSnapshotRaw.
+type PublishSnapshotRawParams struct {
+	Context string `form:"context" json:"context"`
+
+	// AxonIQMessageId Message identifier
+	AxonIQMessageId *string `json:"AxonIQ-MessageId,omitempty"`
+
+	// AxonIQPayloadRevision Payload revision
+	AxonIQPayloadRevision *string `json:"AxonIQ-PayloadRevision,omitempty"`
+
+	// AxonIQPayloadType Payload type
+	AxonIQPayloadType *string `json:"AxonIQ-PayloadType,omitempty"`
+
+	// AxonIQAggregateType Aggregate type
+	AxonIQAggregateType *string `json:"AxonIQ-AggregateType,omitempty"`
+
+	// AxonIQSequenceNumber Sequence number
+	AxonIQSequenceNumber *int64 `json:"AxonIQ-SequenceNumber,omitempty"`
+
+	// AxonIQDateTime Date and time of the event
+	AxonIQDateTime *time.Time `json:"AxonIQ-DateTime,omitempty"`
+}
+
+// DispatchCommandJSONRequestBody defines body for DispatchCommand for application/json ContentType.
+type DispatchCommandJSONRequestBody = Command
+
+// RegisterEndpointJSONRequestBody defines body for RegisterEndpoint for application/json ContentType.
+type RegisterEndpointJSONRequestBody = Endpoint
+
+// UpdateEndpointJSONRequestBody defines body for UpdateEndpoint for application/json ContentType.
+type UpdateEndpointJSONRequestBody = Endpoint
+
+// RegisterCommandHandlerJSONRequestBody defines body for RegisterCommandHandler for application/json ContentType.
+type RegisterCommandHandlerJSONRequestBody = CommandHandler
+
+// UpdateCommandHandlerJSONRequestBody defines body for UpdateCommandHandler for application/json ContentType.
+type UpdateCommandHandlerJSONRequestBody = CommandHandler
+
+// RegisterEventHandlerJSONRequestBody defines body for RegisterEventHandler for application/json ContentType.
+type RegisterEventHandlerJSONRequestBody = EventHandler
+
+// UpdateEventHandlerJSONRequestBody defines body for UpdateEventHandler for application/json ContentType.
+type UpdateEventHandlerJSONRequestBody = EventHandler
+
+// RegisterQueryHandlerJSONRequestBody defines body for RegisterQueryHandler for application/json ContentType.
+type RegisterQueryHandlerJSONRequestBody = QueryHandler
+
+// UpdateQueryHandlerJSONRequestBody defines body for UpdateQueryHandler for application/json ContentType.
+type UpdateQueryHandlerJSONRequestBody = QueryHandler
+
+// PublishEvents1JSONRequestBody defines body for PublishEvents1 for application/json ContentType.
+type PublishEvents1JSONRequestBody = Event
+
+// PublishEvents1ApplicationVndAxoniqEventListPlusJSONRequestBody defines body for PublishEvents1 for application/vnd.axoniq.event.list+json ContentType.
+type PublishEvents1ApplicationVndAxoniqEventListPlusJSONRequestBody = PublishEvents1ApplicationVndAxoniqEventListPlusJSONBody
+
+// DispatchQueryRawJSONRequestBody defines body for DispatchQueryRaw for application/json ContentType.
+type DispatchQueryRawJSONRequestBody = Query
+
+// PublishSnapshotJSONRequestBody defines body for PublishSnapshot for application/json ContentType.
+type PublishSnapshotJSONRequestBody = Snapshot
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error

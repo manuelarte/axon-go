@@ -2883,6 +2883,9 @@
           "wrappingType": {
             "type": "string"
           },
+          "contentType": {
+            "type": "string"
+          },
           "metaData": {
             "type": "object",
             "additionalProperties": {

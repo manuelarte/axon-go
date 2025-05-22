@@ -21,7 +21,6 @@ func (c UserController) GetByID(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
-	// TODO(manuelarte): THIS IS NOT CORRECT, I NEED TO SEND A QUERY
 	user, err := c.userReadProjection.GetUserByID(ctx, query)
 	if err != nil {
 		ctx.JSON(400, gin.H{"msg": err.Error()})

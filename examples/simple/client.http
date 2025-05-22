@@ -1,0 +1,24 @@
+###
+
+GET http://localhost:8024/v2/endpoints?context=default
+
+###
+
+POST http://localhost:8024/v2/endpoints?context=default
+accept: */*
+content-type: application/json
+
+{
+  "name": "go",
+  "type": "HTTP(S)",
+  "baseUrl": "http://host.internal.docker:8081",
+  "healthUrl": "/actuators/info",
+  "wrappingType": "Raw",
+  "contentType": "application/json"
+}
+
+###
+
+DELETE http://localhost:8024/v2/endpoints/1122b1ba-0d75-48c7-ae27-c65af819ca00?context=default
+
+###

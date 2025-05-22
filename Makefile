@@ -29,5 +29,5 @@ tools:
 
 generate:
 	# Generate Go models from openapi.yml specs
-	 go tool oapi-codegen -generate client -package axongo -o client.gen.go .\openapi.json
+	go tool oapi-codegen -config cfg.yml openapi.json
 
