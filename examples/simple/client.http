@@ -1,24 +1,72 @@
 ###
-
-GET http://localhost:8024/v2/endpoints?context=default
-
-###
-
+# 1. Register endpoint
 POST http://localhost:8024/v2/endpoints?context=default
 accept: */*
 content-type: application/json
 
 {
-  "name": "go",
-  "type": "HTTP(S)",
-  "baseUrl": "http://host.internal.docker:8081",
-  "healthUrl": "/actuators/info",
-  "wrappingType": "Raw",
-  "contentType": "application/json"
+"name": "go-app",
+"type": "HTTP(S)",
+"baseUrl": "http://host.internal.docker:8081",
+"healthUrl": "/actuators/info",
+"queryUrl": "/queries",
+"wrappingType": "Raw",
+"contentType": "application/json"
+}
+
+> {%
+client.global.set("endpoint", response.body.id);
+%}
+
+###
+# 1a. Check endpoint is registered
+GET http://localhost:8024/v2/endpoints?context=default
+
+> {%
+if (response.body && Object.keys(response.body).length > 0) {
+  client.global.set("endpoint", response.body[0].id);
+} else {
+  client.log("Warning: Empty response body received");
+}
+%}
+
+###
+# 2. Register query handler GetUserByIDQuery
+POST http://localhost:8024/v2/endpoints/{{endpoint}}/queryHandlers?context=default
+content-type: application/json
+
+{
+  "name": "GetUserByIDQuery"
+}
+
+###
+# 3. Query GetUserByIDQuery
+POST http://localhost:8024/v2/queries?context=default
+content-type: application/json
+
+{
+  "name": "GetUserByIDQuery",
+  "numberOfResponses": 1,
+  "responseCardinality": "single",
+  "responseType": "json",
+  "responseTypeEncoding": "application/json",
+  "payloadType": "org.github.axonserver.connector.go.example.kotlinapp.api.GetUserByIDQuery",
+  "payload": {
+    "id": 1
+  }
+}
+
+###
+# 3a. Or shall I use this instead of /v2/queries/
+POST http://localhost:8024/v2/queries/GetUserByIDQuery?context=default
+content-type: application/json
+
+{
+  "id": 1
 }
 
 ###
 
-DELETE http://localhost:8024/v2/endpoints/1122b1ba-0d75-48c7-ae27-c65af819ca00?context=default
+DELETE http://localhost:8024/v2/endpoints/{{endpoint}}?context=default
 
 ###
