@@ -12,6 +12,10 @@ Some demo projects can be checked in the [./examples](./examples) directory.
 + Register endpoint needs a field `contentType`.
 + The Endpoint schema type and wrappingType can be an enum, not a string.
 
+## Examples
+
+Check the [examples](./examples) folder with different ways to use AxonServer with Go.
+
 
 [axon-server]: https://axoniq.io/product-overview/axon-server
 [axon-server-integration-swagger-ui]: http://localhost:8024/swagger-ui
