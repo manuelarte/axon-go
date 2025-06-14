@@ -30,7 +30,7 @@ func NewUserReadFromUser(u *models.User) *UserRead {
 }
 
 func (g *UserRead) GetType() string {
-	return fmt.Sprintf("%s.%s", constants.PackagePrefix, "api.UserRead")
+	return constants.UserReadType
 }
 
 type UserReadProjection struct {

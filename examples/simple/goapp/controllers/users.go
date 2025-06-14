@@ -1,12 +1,8 @@
 package controllers
 
 import (
-	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	axongo "github.com/manuelarte/axon-go"
 	"goapp/api"
-	"goapp/constants"
 )
 
 type UserController struct {
@@ -30,10 +26,6 @@ func (c UserController) GetByID(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
-	body := axongo.QueryResponse{
-		Id:          constants.Ptr(uuid.NewString()),
-		Payload:     constants.Ptr(structs.Map(user)),
-		PayloadType: constants.Ptr(user.GetType()),
-	}
-	ctx.JSON(200, body)
+	// TODO(manuelarte): I need to set the PayloadType to UserRead and also the metadata
+	ctx.JSON(200, user)
 }

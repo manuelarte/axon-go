@@ -1,6 +1,9 @@
 package constants
 
-const PackagePrefix = "org.github.manuelarte.axongo.example"
+const packagePrefix = "org.github.manuelarte.axongo.example"
+
+const UserReadType = packagePrefix + ".api.UserRead"
+const GetUserByIDQueryType = packagePrefix + ".api.GetUserByIDQuery"
 
 func Ptr[T any](v T) *T {
 	return &v

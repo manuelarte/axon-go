@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	axongo "github.com/manuelarte/axon-go"
 	"goapp/constants"
 )
@@ -13,5 +12,5 @@ type GetUserByIDQuery struct {
 }
 
 func (g GetUserByIDQuery) GetType() string {
-	return fmt.Sprintf("%s.%s", constants.PackagePrefix, "api.GetUserByIDQuery")
+	return constants.GetUserByIDQueryType
 }

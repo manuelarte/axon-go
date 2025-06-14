@@ -23,6 +23,8 @@ import (
 	axongo "github.com/manuelarte/axon-go"
 )
 
+const axonContext = "default"
+
 func main() {
 	logger := setLogger()
 
@@ -41,38 +43,38 @@ func main() {
 		Repository: repositories.NewRepository(db),
 	}
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	hc := http.Client{}
+	c, err := axongo.NewClientWithResponses("http://localhost:8024", axongo.WithHTTPClient(&hc))
+	if err != nil {
+		log.Fatal(err)
+	}
+	endpoint, err := deleteAndRegisterEndpoint(ctx, c, axonContext, "go-app")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Endpoint Registered: %s", endpoint.String())
+
 	if slices.Contains(appCfg.Profiles, "query") {
 		// register query handlers
-		ctx := context.Background()
-		hc := http.Client{}
-
 		{
-			c, err := axongo.NewClientWithResponses("http://localhost:8024", axongo.WithHTTPClient(&hc))
+			body := axongo.RegisterQueryHandlerJSONRequestBody{
+				Name:     constants.Ptr(constants.GetUserByIDQueryType),
+				QueryUrl: constants.Ptr("/users/GetByID"),
+			}
+			resp, err := c.RegisterQueryHandlerWithResponse(
+				ctx,
+				endpoint,
+				&axongo.RegisterQueryHandlerParams{Context: axonContext},
+				body)
 			if err != nil {
 				log.Fatal(err)
 			}
-			endpoint, err := deleteAndRegisterEndpoint(ctx, c, "default", "go-app")
-			if err != nil {
-				log.Fatal(err)
+			if resp.StatusCode() != http.StatusCreated {
+				log.Fatalf("Expected HTTP 201 but received %d. Body: %s", resp.StatusCode(), string(resp.Body))
 			}
-			log.Printf("Endpoint Registered: %s", endpoint.String())
-
-			{
-				params := &axongo.RegisterQueryHandlerParams{Context: "default"}
-				body := axongo.RegisterQueryHandlerJSONRequestBody{
-					Name:     constants.Ptr("org.github.manuelarte.axongo.example.api.GetUserByIDQuery"),
-					QueryUrl: constants.Ptr("/users/GetByID"),
-				}
-				resp, err := c.RegisterQueryHandlerWithResponse(ctx, endpoint, params, body)
-				if err != nil {
-					log.Fatal(err)
-				}
-				if resp.StatusCode() != http.StatusCreated {
-					log.Fatalf("Expected HTTP 201 but received %d. Body: %s", resp.StatusCode(), resp.Body)
-				}
-				fmt.Printf("resp.JSON201: %v\n", resp.Body)
-			}
-
+			fmt.Printf("resp.JSON201: %v\n", string(resp.Body))
 		}
 	}
 
@@ -138,7 +140,6 @@ func deleteAndRegisterEndpoint(
 	}
 
 	{
-		params := &axongo.RegisterEndpointParams{Context: endpointContext}
 		body := axongo.RegisterEndpointJSONRequestBody{
 			BaseUrl:      constants.Ptr("http://host.docker.internal:8081"),
 			HealthUrl:    constants.Ptr("/actuators/info"),
@@ -148,11 +149,16 @@ func deleteAndRegisterEndpoint(
 			WrappingType: constants.Ptr("Raw"),
 			ContentType:  constants.Ptr("application/json"),
 		}
-		resp, err := c.RegisterEndpointWithResponse(ctx, params, body, func(ctx context.Context, req *http.Request) error {
-			req.Header.Add("accept", "*/*")
-			req.Header.Add("content-type", "application/json")
-			return nil
-		})
+		resp, err := c.RegisterEndpointWithResponse(
+			ctx,
+			&axongo.RegisterEndpointParams{Context: endpointContext},
+			body,
+			func(ctx context.Context, req *http.Request,
+			) error {
+				req.Header.Add("accept", "*/*")
+				req.Header.Add("Content-type", "application/json")
+				return nil
+			})
 		if err != nil {
 			log.Fatal(err)
 		}
