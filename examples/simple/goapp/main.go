@@ -46,7 +46,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	hc := http.Client{}
-	c, err := axongo.NewClientWithResponses("http://localhost:8024", axongo.WithHTTPClient(&hc))
+	c, err := axongo.NewClientWithResponses(appCfg.AxonServerAddress, axongo.WithHTTPClient(&hc))
 	if err != nil {
 		log.Fatal(err)
 	}

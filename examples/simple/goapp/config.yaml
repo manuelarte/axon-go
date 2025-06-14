@@ -1,5 +1,6 @@
 ---
 app-name: application-golang
 http-serve-address: localhost:8081
+axon-server-address: http://localhost:8024
 dsn: "user:root@tcp(127.0.0.1:3306)/simple?charset=utf8mb4&parseTime=True&loc=Local"
 profiles: api,query
