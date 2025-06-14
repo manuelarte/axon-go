@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"goapp/api"
+	"goapp/constants"
 )
 
 type UserController struct {
@@ -26,6 +27,7 @@ func (c UserController) GetByID(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
-	// TODO(manuelarte): I need to set the PayloadType to UserRead and also the metadata
+	// TODO(manuelarte): I need to set the metadata
+	ctx.Header("AxonIQ-PayloadType", constants.UserReadType)
 	ctx.JSON(200, user)
 }

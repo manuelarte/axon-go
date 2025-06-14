@@ -18,4 +18,4 @@ Check the [examples](./examples) folder with different ways to use AxonServer wi
 
 
 [axon-server]: https://axoniq.io/product-overview/axon-server
-[axon-server-integration-swagger-ui]: http://localhost:8024/swagger-ui
+[axon-server-integration-swagger-ui]: http://localhost:8024/swagger-ui/index.html?urls.primaryName=Axon+Server+API+-+Integration#/
