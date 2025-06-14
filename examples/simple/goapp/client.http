@@ -48,12 +48,12 @@ Content-type: application/json
 
 {
   "id": "{{$uuid}}",
-  "name": "GetUserByIDQuery",
+  "name": "org.github.manuelarte.axongo.example.api.GetUserByIDQuery",
   "numberOfResponses": 1,
   "responseCardinality": "SINGLE",
-  "responseType": "models.User",
+  "responseType": "org.github.manuelarte.axongo.example.api.UserRead",
   "responseTypeEncoding": "application/json",
-  "payloadType": "org.github.manuelarte.axongo.example.simple.api.GetUserByIDQuery",
+  "payloadType": "org.github.manuelarte.axongo.example.api.GetUserByIDQuery",
   "payloadContentType": "application/json",
   "payload": {
     "id": 1
