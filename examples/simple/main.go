@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"goapp/constants"
 	"log"
 	"log/slog"
 	"net/http"
@@ -59,7 +60,8 @@ func main() {
 			{
 				params := &axongo.RegisterQueryHandlerParams{Context: "default"}
 				body := axongo.RegisterQueryHandlerJSONRequestBody{
-					Name: ptr("GetUserByIDQuery"),
+					Name:     constants.Ptr("GetUserByIDQuery"),
+					QueryUrl: constants.Ptr("/users/GetByID"),
 				}
 				resp, err := c.RegisterQueryHandlerWithResponse(ctx, endpoint, params, body)
 				if err != nil {
@@ -80,9 +82,8 @@ func main() {
 	queryController := controllers.QueryController{}
 
 	router.GET("/actuators/info", actuatorControllers.Info)
-	router.GET("/queries", queryController.Get)
-	router.GET("/queries/GetUserByIDQuery", queryController.GetUserByIDQuery)
-	router.GET("/users/:id", userController.GetByID)
+	router.POST("/queries", queryController.Post)
+	router.POST("/users/GetByID", userController.GetByID)
 	if err = router.Run(appCfg.HttpServeAddress); err != nil {
 		log.Fatal(err)
 	}
@@ -139,13 +140,13 @@ func deleteAndRegisterEndpoint(
 	{
 		params := &axongo.RegisterEndpointParams{Context: endpointContext}
 		body := axongo.RegisterEndpointJSONRequestBody{
-			BaseUrl:      ptr("http://host.docker.internal:8081"),
-			HealthUrl:    ptr("/actuators/info"),
-			QueryUrl:     ptr("/queries"),
-			Name:         ptr(endpointName),
-			Type:         ptr("HTTP(S)"), // HTTP(S), PRocket
-			WrappingType: ptr("Raw"),
-			ContentType:  ptr("application/json"),
+			BaseUrl:      constants.Ptr("http://host.docker.internal:8081"),
+			HealthUrl:    constants.Ptr("/actuators/info"),
+			QueryUrl:     constants.Ptr("/queries"),
+			Name:         constants.Ptr(endpointName),
+			Type:         constants.Ptr("HTTP(S)"), // HTTP(S), PRocket
+			WrappingType: constants.Ptr("Raw"),
+			ContentType:  constants.Ptr("application/json"),
 		}
 		resp, err := c.RegisterEndpointWithResponse(ctx, params, body, func(ctx context.Context, req *http.Request) error {
 			req.Header.Add("accept", "*/*")
@@ -170,8 +171,4 @@ func deleteAndRegisterEndpoint(
 		endpoint = respBody.ID
 	}
 	return endpoint, nil
-}
-
-func ptr[T any](v T) *T {
-	return &v
 }

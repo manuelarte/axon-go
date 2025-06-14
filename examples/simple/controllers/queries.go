@@ -1,13 +1,14 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"goapp/api"
+)
 
-type QueryController struct{}
-
-func (c QueryController) Get(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{})
+type QueryController struct {
+	UserReadProjection api.UserReadProjection
 }
 
-func (c QueryController) GetUserByIDQuery(ctx *gin.Context) {
+func (c QueryController) Post(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{})
 }

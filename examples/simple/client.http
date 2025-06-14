@@ -36,21 +36,25 @@ POST http://localhost:8024/v2/endpoints/{{endpoint}}/queryHandlers?context=defau
 content-type: application/json
 
 {
-  "name": "GetUserByIDQuery"
+  "name": "GetUserByIDQuery",
+  "queryUrl": "http://host.internal.docker:8081/users/GetByID"
 }
 
 ###
 # 3. Query GetUserByIDQuery
 POST http://localhost:8024/v2/queries?context=default
-content-type: application/json
+accept: application/json
+Content-type: application/json
 
 {
+  "id": "{{$uuid}}",
   "name": "GetUserByIDQuery",
   "numberOfResponses": 1,
-  "responseCardinality": "single",
-  "responseType": "json",
+  "responseCardinality": "SINGLE",
+  "responseType": "models.User",
   "responseTypeEncoding": "application/json",
-  "payloadType": "org.github.axonserver.connector.go.example.kotlinapp.api.GetUserByIDQuery",
+  "payloadType": "org.github.manuelarte.axongo.example.simple.api.GetUserByIDQuery",
+  "payloadContentType": "application/json",
   "payload": {
     "id": 1
   }

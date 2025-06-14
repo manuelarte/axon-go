@@ -3,15 +3,19 @@ package api
 import (
 	"context"
 	"fmt"
+	axongo "github.com/manuelarte/axon-go"
+	"goapp/constants"
 
 	"goapp/models"
 	"goapp/repositories"
 )
 
+var _ axongo.Payloadable = new(UserRead)
+
 type UserRead struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Surname string `json:"surname"`
+	ID      int    `json:"id" structs:"id"`
+	Name    string `json:"name" structs:"name"`
+	Surname string `json:"surname" structs:"surname"`
 }
 
 func NewUserReadFromUser(u *models.User) *UserRead {
@@ -25,8 +29,8 @@ func NewUserReadFromUser(u *models.User) *UserRead {
 	}
 }
 
-func (g *UserRead) GetPackageName() string {
-	return "org.github.axonserver.connector.go.example.kotlinapp.api.UserRead"
+func (g *UserRead) GetType() string {
+	return fmt.Sprintf("%s.%s", constants.PackagePrefix, "api.UserRead")
 }
 
 type UserReadProjection struct {
