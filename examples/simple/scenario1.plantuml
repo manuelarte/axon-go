@@ -1,0 +1,32 @@
+@startuml
+
+title Spring Boot App with profile api,query
+
+actor User
+box "Api profile"
+participant SpringBootAppApi
+end box
+queue AxonServer
+box "Query profile"
+participant GoAppQuery
+participant SpringBootAppQuery
+end box
+
+
+GoAppQuery -> AxonServer: Register Endpoint
+SpringBootAppQuery -> AxonServer: Register Instance
+
+GoAppQuery -> AxonServer: Register Query Handler GetUserByID
+SpringBootAppQuery -> AxonServer: Register Query Handler GetUserByID
+
+User -> SpringBootAppApi: Call users/1 endpoint
+activate SpringBootAppApi
+SpringBootAppApi -> AxonServer: Query GetUserByID
+activate AxonServer
+!pragma teoz true
+AxonServer <--> SpringBootAppQuery: Query Request/Response
+& AxonServer <--> GoAppQuery: Query Request/Response
+AxonServer -> SpringBootAppApi: Response for GetUserByID
+deactivate AxonServer
+deactivate SpringBootAppApi
+@enduml

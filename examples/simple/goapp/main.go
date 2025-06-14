@@ -60,8 +60,7 @@ func main() {
 		// register query handlers
 		{
 			body := axongo.RegisterQueryHandlerJSONRequestBody{
-				Name:     constants.Ptr(constants.GetUserByIDQueryType),
-				QueryUrl: constants.Ptr("/users/GetByID"),
+				Name: constants.Ptr(constants.GetUserByIDQueryType),
 			}
 			resp, err := c.RegisterQueryHandlerWithResponse(
 				ctx,
@@ -80,12 +79,14 @@ func main() {
 
 	router := gin.Default()
 	actuatorControllers := controllers.ActuatorControllers{}
-	userController := controllers.NewUserController(userReadProjection)
-	queryController := controllers.QueryController{}
+	userController := controllers.NewUserController()
+	queryController := controllers.NewQueryController(userReadProjection)
 
 	router.GET("/actuators/info", actuatorControllers.Info)
+
 	router.POST("/queries", queryController.Post)
-	router.POST("/users/GetByID", userController.GetByID)
+
+	router.GET("/users/:id", userController.GetByID)
 	if err = router.Run(appCfg.HttpServeAddress); err != nil {
 		log.Fatal(err)
 	}
