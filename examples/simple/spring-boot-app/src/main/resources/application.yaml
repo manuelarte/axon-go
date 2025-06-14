@@ -1,0 +1,28 @@
+info.app:
+  name: ${name}
+  description: Kotlin app
+  version: ${version}
+  java.version: 21
+
+management:
+  info.env.enabled: true
+  endpoints.web.exposure.include: info,health
+  endpoint:
+    info:
+      access: read_only
+
+axon:
+  serializer:
+    general: jackson
+    messages: jackson
+  axonserver:
+    servers: localhost:8124
+spring:
+  profiles:
+    active: api,query
+  datasource:
+    username: user
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/simple
+  jpa.show-sql: true
