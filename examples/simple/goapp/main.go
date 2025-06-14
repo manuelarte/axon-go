@@ -60,7 +60,7 @@ func main() {
 			{
 				params := &axongo.RegisterQueryHandlerParams{Context: "default"}
 				body := axongo.RegisterQueryHandlerJSONRequestBody{
-					Name:     constants.Ptr("GetUserByIDQuery"),
+					Name:     constants.Ptr("org.github.manuelarte.axongo.example.api.GetUserByIDQuery"),
 					QueryUrl: constants.Ptr("/users/GetByID"),
 				}
 				resp, err := c.RegisterQueryHandlerWithResponse(ctx, endpoint, params, body)
