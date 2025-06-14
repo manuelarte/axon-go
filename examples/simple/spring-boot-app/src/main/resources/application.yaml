@@ -1,3 +1,4 @@
+---
 info.app:
   name: ${name}
   description: Kotlin app
