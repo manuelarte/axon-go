@@ -3,11 +3,12 @@ package api
 import (
 	"context"
 	"fmt"
-	axongo "github.com/manuelarte/axon-go"
-	"goapp/constants"
 
+	"goapp/constants"
 	"goapp/models"
 	"goapp/repositories"
+
+	axongo "github.com/manuelarte/axon-go"
 )
 
 var _ axongo.Payloadable = new(UserRead)

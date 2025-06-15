@@ -1,8 +1,9 @@
 package api
 
 import (
-	axongo "github.com/manuelarte/axon-go"
 	"goapp/constants"
+
+	axongo "github.com/manuelarte/axon-go"
 )
 
 var _ axongo.Payloadable = new(GetUserByIDQuery)

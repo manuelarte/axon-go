@@ -4,8 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct {
-}
+type UserController struct{}
 
 func (c UserController) GetByID(ctx *gin.Context) {
 	// TODO(manuelarte): to call axon server query

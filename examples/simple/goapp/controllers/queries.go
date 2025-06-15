@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"goapp/api"
 	"goapp/constants"
-	"net/http"
 )
 
 type QueryController struct {
